@@ -1,23 +1,23 @@
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import google.generativeai as genai
+import google.generativeai as genai  # <-- This is the missing piece!
 import base64
 import io
 import docx 
 
-# 1. LOAD THE HIDDEN KEY
-load_dotenv()
+# 1. LOAD THE HIDDEN KEY (Bulletproof Method)
+load_dotenv(find_dotenv()) 
 my_secret_key = os.getenv("GEMINI_API_KEY")
 
-if not my_secret_key:
-    print("CRITICAL ERROR: No API Key found! Check your .env file or Render Environment Variables.")
-
-# 2. SETUP THE AI BRAIN (Notice: No quotation marks around my_secret_key!)
+# 2. SETUP THE AI BRAIN
 genai.configure(api_key=my_secret_key)
 model = genai.GenerativeModel('gemini-2.5-flash')
+
+# 3. START FASTAPI
+# (Keep your app = FastAPI() and the rest of your code exactly as it is below this line!)
 
 # 3. START FASTAPI
 app = FastAPI()
