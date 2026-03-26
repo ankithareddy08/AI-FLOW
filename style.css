@@ -1,0 +1,212 @@
+/* ==========================================
+   1. BASE STYLES (The Foundation)
+   ========================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f4f7f6; /* A soft, modern light gray background */
+    color: #333;
+    height: 100vh; /* Takes up 100% of the screen height */
+    overflow: hidden; /* Prevents the whole page from scrolling */
+}
+
+/* ==========================================
+   2. MAIN LAYOUT (Creating the Columns)
+   ========================================== */
+.app-container {
+    display: flex; /* This is the magic that puts the sidebar and right panel side-by-side */
+    height: 100%;
+    width: 100%;
+}
+
+/* ==========================================
+   3. THE LEFT SIDEBAR (The Control Center)
+   ========================================== */
+.sidebar {
+    width: 280px; /* Fixed width like in your sketch */
+    background-color: #ffffff;
+    border-right: 1px solid #e5e7eb;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Spacing between Logo, New Task, and the Menu */
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.new-task-btn {
+    padding: 12px;
+    background-color: transparent;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.new-task-btn:hover {
+    border-color: #0047AB;
+    color: #0047AB;
+}
+
+.action-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Spacing between the tool buttons */
+}
+
+.action-btn {
+    padding: 14px;
+    background-color: #fafafa;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+/* The hover effect makes the app feel premium and interactive */
+.action-btn:hover {
+    background-color: #eef2ff;
+    border-color: #0047AB;
+    color: #0047AB;
+}
+
+/* ==========================================
+   4. THE RIGHT PANEL (Output & Input)
+   ========================================== */
+.right-panel {
+    flex: 1; /* Tells this section to take up all remaining space to the right */
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    gap: 20px;
+    background-color: #f9fbff;
+}
+
+/* --- Top Output Section --- */
+.output-section {
+    flex: 1; /* Pushes the input box to the bottom */
+    display: flex;
+    justify-content: center;
+}
+
+.output-box {
+    width: 100%;
+    max-width: 800px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.output-icons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.output-icons button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    font-size: 14px;
+}
+
+.output-icons button:hover {
+    color: #0047AB;
+}
+
+/* --- Bottom Input Section --- */
+.input-section {
+    display: flex;
+    justify-content: center;
+}
+
+.input-box {
+    width: 100%;
+    max-width: 800px;
+    background-color: #ffffff;
+    border: 2px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+}
+
+textarea {
+    width: 100%;
+    min-height: 80px;
+    border: none;
+    outline: none;
+    resize: none;
+    font-size: 16px;
+    padding-bottom: 10px;
+}
+
+.run-btn {
+    align-self: flex-end; /* Pushes the button to the right side of the box */
+    background-color: #0047AB;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.run-btn:hover {
+    background-color: #003380;
+}
+/* ==========================================
+   5. UPLOAD BUTTON STYLES
+   ========================================== */
+.input-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Spreads the buttons apart */
+    margin-top: 10px;
+}
+
+.upload-btn {
+    background-color: #f1f5f9;
+    color: #475569;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #cbd5e1;
+    transition: 0.2s;
+}
+
+.upload-btn:hover {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}
+
+.file-name-display {
+    font-size: 12px;
+    color: #64748b;
+    margin-left: 10px;
+    flex-grow: 1; /* Pushes the Run button to the far right */
+}
