@@ -1,32 +1,25 @@
 import os
 from dotenv import load_dotenv
-import google.generativeai as genai
-# ... other imports ...
-
-# 1. LOAD THE HIDDEN KEY
-load_dotenv()
-api_key = os.getenv("GEMINI_API_KEY")
-
-if not api_key:
-    print("Error: No API Key found in .env file!")
-
-genai.configure(api_key=api_key)
-# ... rest of your code ...
-
-
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import google.generativeai as genai
 import base64
 import io
-import docx # <-- Our new Word Document reader!
+import docx 
 
-# 1. SETUP THE AI BRAIN
-genai.configure(api_key="api_key")
+# 1. LOAD THE HIDDEN KEY
+load_dotenv()
+my_secret_key = os.getenv("GEMINI_API_KEY")
+
+if not my_secret_key:
+    print("CRITICAL ERROR: No API Key found! Check your .env file or Render Environment Variables.")
+
+# 2. SETUP THE AI BRAIN (Notice: No quotation marks around my_secret_key!)
+genai.configure(api_key=my_secret_key)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
+# 3. START FASTAPI
 app = FastAPI()
 
 app.add_middleware(
@@ -46,7 +39,7 @@ class UserRequest(BaseModel):
 async def run_ai(request: UserRequest):
     print(f"Sending to Gemini: {request.action}")
     
-    # 2. BUILD THE PROMPTS
+    # 4. BUILD THE PROMPTS
     prompt = ""
     if request.action == "Summarize Text":
         prompt = f"Please summarize the provided text/document into 3 to 4 easy-to-read bullet points:\n\n{request.text}"
@@ -59,30 +52,24 @@ async def run_ai(request: UserRequest):
 
     contents = [prompt]
     
-    # 3. THE MAGIC FILE INTERCEPTOR
+    # 5. THE MAGIC FILE INTERCEPTOR
     if request.file:
         try:
             header, encoded_data = request.file.split(",", 1)
             mime_type = header.split(":")[1].split(";")[0]
             
-            # --- NEW CODE: Check if it is a Word Document ---
+            # Check if it is a Word Document
             if "wordprocessingml.document" in mime_type or "msword" in mime_type:
                 print("Word document detected! Extracting text...")
                 
-                # Decode the file data
                 file_bytes = base64.b64decode(encoded_data)
-                
-                # Open the Word Doc in memory
                 doc = docx.Document(io.BytesIO(file_bytes))
-                
-                # Rip all the text out of the paragraphs
                 extracted_text = "\n".join([para.text for para in doc.paragraphs])
                 
-                # Add this hidden text to the prompt we send to Gemini!
                 contents = [prompt + "\n\n--- Document Content ---\n" + extracted_text]
                 print("Text successfully extracted and sent to AI.")
                 
-            # --- OLD CODE: If it's an Image or PDF, let Gemini handle it ---
+            # If it's an Image or PDF, let Gemini handle it natively
             else:
                 file_part = {
                     "mime_type": mime_type,
@@ -95,7 +82,7 @@ async def run_ai(request: UserRequest):
             print(f"Error reading file: {e}")
             return {"result": "There was an error reading your file. Please try pasting the text instead."}
 
-    # 4. CALL THE API
+    # 6. CALL THE API
     try:
         response = model.generate_content(contents)
         return {"result": response.text}
