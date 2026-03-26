@@ -1,3 +1,20 @@
+import os
+from dotenv import load_dotenv
+import google.generativeai as genai
+# ... other imports ...
+
+# 1. LOAD THE HIDDEN KEY
+load_dotenv()
+api_key = os.getenv("GEMINI_API_KEY")
+
+if not api_key:
+    print("Error: No API Key found in .env file!")
+
+genai.configure(api_key=api_key)
+# ... rest of your code ...
+
+
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -7,7 +24,7 @@ import io
 import docx # <-- Our new Word Document reader!
 
 # 1. SETUP THE AI BRAIN
-genai.configure(api_key="AIzaSyBEswRVRviylRDBTe-8FJhpXms1onEIUiE")
+genai.configure(api_key="api_key")
 model = genai.GenerativeModel('gemini-2.5-flash')
 
 app = FastAPI()
